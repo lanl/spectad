@@ -1,12 +1,15 @@
 # Speculatively-Parallel Temperature-Accelerated Dynamics (`SpecTAD`)
 
 **Principal SpecTAD Author:**
+
 Richard J. Zamora (2015-2017)
+
 rjzamora@lanl.gov
-Theoretical Division,
-Los Alamos National Laboratory, Los Alamos, NM
+
+Theoretical Division,Los Alamos National Laboratory, Los Alamos, NM
 
 **Original TAD Authors:**
+
 Arthur F. Voter and Blas P. Uberuaga
 
 ***
