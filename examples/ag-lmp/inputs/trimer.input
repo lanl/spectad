@@ -4,7 +4,7 @@
 0.0     xB - If deposition: Fraction of deps for type 2
 0.0     xC - If deposition: Fraction of deps for type 3
 trimer  casename
-ag      potnam(1) - EAM potential name for atom type 1
+xx      potnam(1) - EAM potential name for atom type 1
 xx      potnam(2) - EAM potential name for atom type 2
 1000000 naccept - number of accepted transitions
 0.001   tadtimestop - low temperature time to stop TAD run at (seconds)
