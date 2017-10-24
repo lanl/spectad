@@ -1,0 +1,234 @@
+# maktad - compile and link (YES LAMMPS)
+# (i.e., a primitive, non-Make makefile)
+# Bourne shell - leave the blank line at top
+#------------------------------------------------------
+
+# Choose Machine Type (linux, mac, etc..):
+machinetype="mac"
+
+#------------------------------------------------------
+iflage67="0"        # compile e67 routines (airebo)
+iflage68="0"        # compile e68 routines (meam)
+iflage69="0"        # compile e69 routines (tight binding)
+iflage70="0"        # compile e70 routines (albe tersoff)
+iflage72="0"        # compile e72 routines (ionic potential)
+iflage73="0"        # compile e73 routines (tight binding)
+iflage74="0"	      # compile e74 routines (2-comp stil-web)
+iflage75="0"	      # compile e75 routines (Lenosky TB)
+iflage76="0"	      # compile e76 routines (EDIP Si)
+iflage77="0"	      # compile e77 routines (ReaxFF)
+iflage78="0"	      # compile e78 routines (Siegel LJ)
+iflage80="0"        # compile e80 routines (Buck+Morse)
+#------------------------------------------------------
+
+## Use REAL LAMMPS wrapper:
+cp mod_lammps.f mod_lammps_use.f
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+# Path to LAMMPS extraction directory #
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ #
+
+LAMMPS_ROOT=/Users/rzamora/lammps
+LAMMPS_SRC=$LAMMPS_ROOT/src 
+LAMMPS_FORT=$LAMMPS_ROOT/examples/COUPLE/fortran2
+LAMMPS_INC="-I$LAMMPS_SRC -I$LAMMPS_FORT "
+
+if test "$machinetype" = "linux"
+then
+
+  echo "compiling for linux"
+  LAMMPS_LINK="-L$LAMMPS_SRC -L$LAMMPS_FORT -llammps_fortran -llammps_mpi "
+  compiler="mpif90 $LAMMPS_INC"
+  gflags="-c -O3 -fbounds-check -fbacktrace "
+  optflags="-c -O3 -fbounds-check  -fbacktrace "
+  linker="mpif90 "
+  lflags=" -O3 $LAMMPS_LINK "
+
+elif test "$machinetype" = "mac"
+then
+
+  echo "compiling for mac"
+  LAMMPS_LINK="-L$LAMMPS_SRC -L$LAMMPS_FORT -llammps_fortran -llammps_mac_mpi "
+  compiler="mpif90-openmpi-mp $LAMMPS_INC"
+  gflags="-c -O3 -fbounds-check -fbacktrace "
+  optflags="-c -O3 -fbounds-check  -fbacktrace "
+  linker="mpif90-openmpi-mp "
+  lflags=" -O3 $LAMMPS_LINK "
+
+else
+  echo unrecognized machine type $machinetype
+  exit
+fi
+
+#----------------------------------------------------------------------
+
+if test "$iflage67" = "0"
+then
+   e67c="e67subs.f "
+else
+   e67c="../tad.e67/e67subs.f "
+fi
+
+if test "$iflage68" = "0"
+then
+   e68c="e68subs.f e68utils.f "
+else
+   e68c="../tad.e68/e68subs.f ../tad.e68/e68utils.f ../tad.e68/e68blockdata.f "
+   e68l="e68blockdata.o "
+fi
+
+if test "$iflage69" = "0"
+then
+   e69c="e69subs.f e69mathsub.f "
+else
+   e69c="../tad.e69/e69subs.f ../tad.e69/e69mathsub.f "
+fi
+
+if test "$iflage70" = "0"
+then
+   e70c="e70subs.f"
+else
+   e70c="../tad.e70/e70subs.f"
+fi
+
+if test "$iflage74" = "0"
+then
+   e74c="swsubs_tad2.f"
+   e74l="swsubs_tad2.o"
+else
+   e74c="../tad.e74/swsubs_tad2.f"
+   e74l="swsubs_tad2.o"
+fi
+
+if test "$iflage72" = "0"
+then
+   e72c="e72subs.f"
+   e72l="e72subs.o"
+else
+   e72c="../tad.e72/e72subs.f"
+#   e72l="-L../tad.e72/ -ldpmta "
+   e72l="e72subs.o"
+fi
+
+if test "$iflage73" = "0"
+then
+   e73c="TBMD-mod.f "
+   e73l="TBMD-mod.o "
+else
+   e73c="../tad.e73/TBMD-mod.f "
+   e73l="-L/home/mcogoni/Linux_ATHLON3DNow2/lib/ -llapack -lf77blas -latlas \
+         TBMD-mod.o "
+fi
+
+if test "$iflage75" = "0"
+then
+   e75c="lenosky-tad.f "
+   e75l="lenosky-tad.o"
+else
+   e75c="../tad.e75/lenosky-tad.f "
+   e75l="lenosky-tad.o"
+fi
+
+if test "$iflage76" = "0"
+then
+   e76c="edip-tad.f "
+   e76l="edip-tad.o "
+else
+   e76c="../tad.e76/edip-tad.f "
+   e76l="edip-tad.o"
+fi
+
+if test "$iflage77" = "0"
+then
+   e77c="e77subs.f"
+   e77l="e77subs.o"
+else
+   e77c="../tad.e77/e77subs.f ../tad.e77/reac.f ../tad.e77/poten.f "
+   e77l="e77subs.o reac.o poten.o "
+fi
+
+if test "$iflage78" = "0"
+then
+   e78c="e78subs.f"
+   e78l="e78subs.o"
+else
+   e78c="../tad.e78/e78subs.f"
+   e78l="e78subs.o"
+fi
+
+if test "$iflage80" = "0"
+then
+   e80c="e80subs.f"
+   e80l="e80subs.o"
+else
+   e80c="../tad.e80/e80subs.f"
+   e80l="e80subs.o"
+fi
+
+ ###### compile ######
+echo "compiling..."
+$compiler  $gflags    lammps_comm.f      ; echo compiled lammps_comm.f
+$compiler  $gflags    mod_mpi.f          ; echo compiled mod_mpi.f
+$compiler  $gflags    mod_lammps_use.f   ; echo compiled mod_lammps_use.f
+$compiler  $gflags    tad.f              ; echo compiled tad.f
+$compiler  $optflags  reordermatch.f     ; echo compiled reordermatch.f
+$compiler  $optflags  mdsubs_tad3.f      ; echo compiled mdsubs_tad3.f
+$compiler  $optflags  e0subs_tad3.f      ; echo compiled e0subs_tad3.f
+$compiler  $optflags  dimer_tad.f        ; echo compiled dimer_tad.f
+$compiler  $optflags  neb_tad.f          ; echo compiled neb_tad.f
+$compiler  $optflags  descentcheck.f     ; echo compiled descentcheck.f
+$compiler  $optflags  refinetransition.f ; echo compiled refinetransition.f
+$compiler  $optflags  rotalign.f         ; echo compiled rotalign.f
+$compiler  $optflags  wrksubs_tad2.f     ; echo compiled wrksubs_tad2.f
+$compiler  $optflags  trpsubs.f          ; echo compiled trpsubs.f
+$compiler  $optflags  msubs.f            ; echo compiled msubs.f
+$compiler  $optflags  tersubs_tad2.f     ; echo compiled tersubs_tad2.f
+$compiler  $optflags  nmodes.f           ; echo compiled nmodes.f
+$compiler  $optflags  nmodes_subset.f    ; echo compiled nmodes_subset.f
+$compiler  $optflags  sdiag.f            ; echo compiled sdiag.f
+$compiler  $optflags  rsp.f              ; echo compiled rsp.f
+$compiler  $optflags  conjgrad.f         ; echo compiled conjgrad.f
+$compiler  $optflags  acg.f              ; echo compiled acg.f
+$compiler  $optflags  archsubs.f         ; echo compiled archsubs.f
+$compiler  $optflags  miscsubs.f         ; echo compiled miscsubs.f
+$compiler  $optflags  $e67c              ; echo compiled $e67c
+$compiler  $optflags  $e68c              ; echo compiled $e68c
+$compiler  $optflags  $e69c              ; echo compiled $e69c
+$compiler  $optflags  $e70c              ; echo compiled $e70c
+$compiler  $optflags  $e72c              ; echo compiled $e72c
+$compiler  $optflags  $e73c              ; echo compiled $e73c
+$compiler  $optflags  $e74c              ; echo compiled $e74c
+$compiler  $optflags  $e75c              ; echo compiled $e75c
+$compiler  $optflags  $e76c              ; echo compiled $e76c
+$compiler  $optflags  $e77c              ; echo compiled $e77c
+$compiler  $optflags  $e78c              ; echo compiled $e78c
+$compiler  $optflags  $e80c              ; echo compiled $e80c
+$compiler  $optflags  e999subs.f         ; echo compiled e999subs.f
+$compiler  $optflags  lbfgs_new.f        ; echo compiled lbfgs_new.f
+
+###### link ######
+
+## Use These commnds if using lammps_comm.exe...
+## (Note that lammps_comm is NOT currently used)
+# echo "linking lammps_comm..."
+# $linker $lflags lammps_comm.o -o lammps_comm.exe
+# echo executable is called lammps_comm.exe
+# cp lammps_comm.exe ~/bin/.
+
+echo "linking tad..."
+$linker $lflags  tad.o mod_mpi.o mod_lammps_use.o reordermatch.o mdsubs_tad3.o  e0subs_tad3.o  \
+neb_tad.o descentcheck.o refinetransition.o rotalign.o \
+dimer_tad.o \
+wrksubs_tad2.o trpsubs.o  msubs.o \
+tersubs_tad2.o \
+nmodes.o nmodes_subset.o sdiag.o rsp.o e67subs.o   \
+conjgrad.o acg.o archsubs.o miscsubs.o \
+e68subs.o e68utils.o \
+e69subs.o e69mathsub.o \
+e70subs.o \
+e999subs.o \
+lbfgs_new.o \
+$e68l $e72l $e73l $e74l $e75l $e76l $e77l $e78l $e80l \
+    -o spectad.exe
+
+echo executable is called spectad.exe

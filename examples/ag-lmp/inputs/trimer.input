@@ -1,0 +1,71 @@
+1       nprocs_force - Number of cores for force calls
+1       nprocs_rep - Number of ParRep Slaves for each SpecTAD process
+0.0     xA - If deposition: Fraction of deps for type 1
+0.0     xB - If deposition: Fraction of deps for type 2
+0.0     xC - If deposition: Fraction of deps for type 3
+trimer  casename
+ag      potnam(1) - EAM potential name for atom type 1
+xx      potnam(2) - EAM potential name for atom type 2
+1000000 naccept - number of accepted transitions
+0.001   tadtimestop - low temperature time to stop TAD run at (seconds)
+200.    low temperature (ignored if not in tad mode)
+750.    high temperature
+0       ivariabletemp - adjust high temperature based on minimum barrier (itad=2 or 7 only)
+750.    temphighmax - maximum high temperature if ivariabletemp=1
+5.d11   prefacmin - assumed minimum prefactor
+0.05    uncertainty delta - confidence level of getting correct event
+199     ietype - energy expression (0=EAM)
+303     natom - number of atoms
+153     nmove - number of moving atoms
+500     nmd - number of MD steps per block
+25      nmdsub - subdivision of nmd to store trajectory for refining
+1000    nwarm - number of steps to warm a cold trajectory
+500     nthermalize - number of steps to thermalize (randomize) a trajectory
+500     nblack - number of steps to blackout after a transition (rethermalize)
+1       ibadignore - ignore failure of warmup or blackout steps
+4d-15   dt - MD time step (seconds)
+1.d12   thermrate - Langevin coupling constant (inverse seconds)
+0       iseed - use zero if you want a random seed each time
+6000    nsteep1 - maximum number of steepest descent steps at each new basin
+6000    nsteep2 - maximum number of steepest descent steps to check for transition
+6       ifundc - minimization method for transition detection (0=steepest decent, 1=quickmin, etc)
+300     tqtempmax - max temp for thermal quench, ifundc=5 only
+0.1     tqrate - temp quench rate (K/dt), ifundc=5 only
+1       ivineyard - calculate vineyard prefactors
+0       irotalign - 0=no rotate, 1=rotate into alignment before transition check, 2=rotate only z
+1.0d0   gfac - steepest-desc. factor (1.0 works well for EAM)
+0.3d0   transcrit - distance criteria for transition detection
+0       itranscrit - method for determining transition (0=distance,1=coordination,2=rcut coord,3=full bonding)
+0       ndimer - number of dimers to do for every new state
+1       ndimeretad - number of dimers to do for unequivalent states in dimeretad modes
+1       idimerdof - method for randomizing initial dimer points
+18      ndimerdof - number of dof to include in initial dimer points for idimerdof=1 only
+3.0d0   rdimerdist - distance to count coordination for dimers
+8       ndimercoord - coordination that defines over or under coordination
+1       idimeroverunder - if dimer should displace atoms that are 0=over, 1=under, or 2=both coordinated
+0.22d0  rdimerdisp - size of displacements in dimer
+.false. lstore_min - store minimum of each state
+.false. lstore_minunpbc - store <casename>.unpbc.<itrans>.dat files
+.false. lstore_att - store all attempted transitions
+.false. lstore_sad - store saddle points
+.false. lstore_end - store all end points, including dimer
+.false. lstore_dimer - store dimer saddle points
+.false. lstore_neb - store initial and final neb files
+.false. lstore_att_chs - store snapshot of attempted transitions, in chs format
+1       ipr - printout level
+5.d-8   dvcrit - energy (h) conv. crit; 5.d-8 is good for EAM
+1.d-4   gcrit  - total grad length (h/A) conv. crit; 1.d-4 is good for EAM
+1.d-5   drcrit - single-atom displacement (A) conv. crit; 1.d-5 is good for EAM
+100     itad - tad mode to run in (0=plain,100=spectad)
+1       irecognize - previous state recognition level, only partially used
+0       ireadstates - read in state files from previous runs?
+13      nimage - NEB parameter: number of images in chain
+2       ifunneb - minimization method for neb (0=steepest decent, 1=quickmin)
+1       itan - NEB parameter: tangent method to use
+1       iclimb - NEB parameter: 1=use climbing image, 0=no
+0.1d0   springk - NEB parameter: spring constant
+0.d0    eshallow - NEB parameter: maximum barrier to not resolve
+0.0d0   hotmix - fraction of hot trajectory to mix in initial NEB
+0       inebdimer - 1=launch dimer from top of NEB
+1       inebirc - 1=ignore roll check in NEB
+0.d0    ereverse - size of reverse barriers to ignore

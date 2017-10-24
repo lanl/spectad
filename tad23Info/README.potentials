@@ -1,0 +1,45 @@
+Instructions to add another potential to the TAD3 code
+----------------------------------------------------------------------
+
+NOTE: This is a rough first draft.
+
+To add a new potential type to the tad3 code, do the following:
+
+1) Assign a unique number to the potential type
+   (currently, 0=EAM, 27=Tersoff, 67=AIREBO, 68=MEAM...
+    NOTE: not all potentials are implemented in every distribution of TAD)
+
+2) Add a call in the tad3.f code to a prmst routine for the new potential type.
+   prmst should have the following arguments (ntype,maxtyp,rcut,amu,azero)
+   ntype=number of atom types
+   maxtyp=maximum number of types (parameter of tad code)
+   rcut=array of cutoffs
+   amu=array of atomic masses of types
+   azero=lattice constant for system
+
+   NOTE:  look at existing prmst routines to see how to set it up
+
+   prmst should set up parameters of the potential.  parameters that
+aren't in the call should be passed via a common block.
+
+3) add a call in mdsubs_tad2.f for the gradient call.  there is an if
+block on ietype that defines a call to the gradient routine.  the
+routine should return also the energy.  the things passed to the
+gradient call are:
+   natom=number of atoms
+   nmove=number of moving atoms
+   x=x coordinates of system
+   y=y coordinates of system
+   z=z coordinates of system
+   itype=array of types of atoms
+   tax=x dimensions of cell
+   tay=y dimensions of cell
+   taz=z dimensions of cell
+   ietype=number of potential type
+   maxtyp=maximum number of atom types
+   rcut=array of radial cutoffs
+   energy=energy of coordinates (returned)
+   grad=gradient of coordinates (returned)
+   hyperratio=not used currently
+
+4) that should be it.

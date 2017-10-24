@@ -1,0 +1,214 @@
+README file for TAD2 program;  LA-CC-02-05
+
+updated lightly 9/7/07
+last updated 6/19/03 for version tad_3.19
+
+**********************************************************************
+-------- The most important information -------
+**********************************************************************
+
+To compile and link the TAD code, use the maktad script,
+which creates tad3.exe.
+
+If you are using EAM potentials, set the environment variable POTSDIR
+to the directory where the EAM potential files exist.  You can create
+a directory of our common EAM potentials from the portatpot.tar.gz file,
+which is included in this package for your convenience.  
+
+To learn about the input parameters, see README.input
+
+A good way to view the configurations resulting from a TAD run is to use the
+clsmanview program,  which can be downloaded from Art Voter's web site:
+http://www.t12.lanl.gov/home/afv/
+The clsmanview package now includes a manual (as of 9/07).
+
+There is also a partial manual for the TAD code (partialMANUAL.pdf), 
+which describes the flow and the output.  See below as well.
+
+
+**********************************************************************
+------ Using other potentials -------
+**********************************************************************
+
+If you are using another potential type, please see the README in the
+corresponding directory.  Compilation of a given potential is
+determined by a flag at the top of the maktad file.
+Currently, the following potentials are implemented, though not all are 
+distributed with the base distribution:
+   27: Tersoff (Kress implementation)
+   67: (AI)REBO (Stuart implementation)
+   68: Baske's MEAM
+   69: Tight Binding
+   70: Tersoff/Brenner/Albe (Beardmore/Nordlund implementation)
+   71: 2-component Stillinger-Weber
+   72: Rigid shell model 
+   73: Tight Binding
+
+If you are interested in one of these potentials, please contact Art Voter 
+or Blas Uberuaga. 
+
+See README.potentials if you want to understand how to install your own
+new potential
+
+**********************************************************************
+------- Examples -------
+**********************************************************************
+
+The examples are found in the tad-examples subdirectory.
+
+-------"tetramer" test/example case----------
+This is a 4-atom cluster of Ag atoms on the Ag(100) surface.
+It is designed to have realistic parameter settings, and should
+run in a couple of hours or so (depending on your computer speed).
+
+To run it:
+
+  tad3.exe <tetramer.input >tetramer.lis
+
+
+-------"tetfast" test/example case----------
+This is like tetramer, but with aggressive settings to make it finish 
+faster (typically under an hour unless we have fiddled with the parms).
+
+To run it:
+
+  tad3.exe <tetfast.input >tetfast.lis
+
+
+-------"tetfast" SAMPLE RUN ----------
+There is a sample run of the tetfast case in "samplerun-tetfast.  This may
+be useful for learning how to view and analyze results of a TAD simulation in
+a situation where a run cannot be easily performed directly (e.g., in a short course).
+
+
+-------"tetfast2" test/example case----------
+This is like tetfast, but using the itad=1 (newtad) setting, which
+escapes revisited states more quickly by exploiting the enhancements described
+in Montalenti and Voter (JCP 116, 4819 (2002)).  State recognition is also turned on.
+
+To run it:
+
+  tad3.exe <tetfast2.input >tetfast2.lis
+
+
+
+**********************************************************************
+------- Selecting itad Mode -------
+**********************************************************************
+
+We have been adding several new modes to the TAD code, enhancing the
+efficiency of TAD for certain systems.  These are our current
+recommendations for selecting the itad value most appropriate for your
+system, as of 6/19/03.
+
+itad=0: This is regular TAD, as described in the original Sorensen and
+Voter paper.  It is recommended when you know little about your
+system and are not sure if your system meets the requirements of the
+other modes.
+
+itad=1: This is Emin TAD, as described by Montalenti and Voter.  If
+your system revists states often, this will increase the efficiency,
+but will have no effect if your system never revisits states.
+
+itad=2: This is dimer-based Emin TAD, where dimer searches are done to
+find the minimum barrier for a state.  To use this, you need to set
+ndimer to the number of dimer searches you want.  The more you do, the
+more likely the dimer is to find the lowest barrier event.  To use
+this mode, you need a system that has clean saddle points separating
+your states.
+
+itad=6: This is synthetic TAD.  Events that are seen often are made
+synthetic.  That is, they are treated in a purely KMC way, their times
+drawn from a Poisson distribution.  This is useful if your system gets
+stuck in a "super-basin" that contains many sub-states with small
+barriers.  This should allow the system to more quickly explore those
+sub-states.  Vineyard prefactors need to be calculated, so ivineyard=2
+should be set in your .input file.
+
+itad=7: This mode combines the itad=2 and itad=6 modes.  To be useful,
+the requirements of both of those modes must hold for your system.
+
+------- ALSO, for experts, new for version 3.08-----------
+
+The iequivcheck parameter (normally hardwired to zero in tad3.f) MIGHT now be working
+correctly.  If you are brave, you can try setting it to 1, recompiling, and running
+that way.  Assuming that itad=1, this will then make use of the fact that any state
+that is equivalent in energy to high precision (also set in the code) is almost
+guaranteed to be a state that has the same minimum barrier for escape.  Thus, for
+states whose energies match a previous one, it will quickly reach the converged
+EMIN limit, in which the stop time is determined by simply extrapolating up from
+the low-temperature tick mark along a line with a slope equal to the minimum barrier
+for the escape from the state.
+a line
+
+-------- For experts, new for version 3.11 -------------
+- synthtad mode installed (itad=6)
+- dimeretad mode installed (itad=2)
+- synthdimeretad mode installed (itad=7)
+
+-------- New for version 3.12 -----------
+- logical flow rearranged some.  User should not notice much difference,
+but please report changes in behavior from version 3.11 - thanks! -
+
+**********************************************************************
+------------To analyze a run--------------
+**********************************************************************
+
+outputs you can look at:
+  <casename>.lis  - the main output listing
+  <casename>.times  - summary of all accepted transitions
+  <casename>.barriers  - summary of all barriers observed during run
+  <casename>.blok - condensed summary of almost everything that happens
+  <casename>.boost - summary of the computational boost achieved
+
+About the blok file:
+It is cryptic, and requires a very wide screen, but it has a lot of information
+ - perhaps all you will need.  
+Here is the meaning of the various columns:
+
+istate - state number  - i.e., the number of the "runningstate" output 
+         cluster file
+iofl  - iofficial -  official state number (i.e., the base number for 
+        virtually all other output files)
+reord - indicates whether atoms are reorder to match the official
+        state (0 if not reordered, otherwise equals iofficial)
+iqiv  - indicates energy equivalence to a previous state
+iblk  - iblock - block number - simply climbs until a transition is accepted
+ijmp  - 1 if a jump (attempted transition) has occurred in this block
+ingh  - ineigh - neighbor number jumped to (.e.g., saddle for this is stored 
+        as <casename>.<iofficial>.sad.<ingh>.dat)
+ninv  - ninvolved - number of atoms involved in this transition
+ineb  - indicates whether the event was found with NEB (ie encountered
+        during the high temperature MD) or with the dimer searches
+isyn  - isynthetic - whether or not this transition is in synthetic mode (0=no)
+bar   - barrier (eV) for the jump observed in this block
+insh  - ineighshortest - neighbor number (transition number) that currently 
+        has the shortest-time tick mark at low T.
+ssyn  - indicates whether or not the current candidate event,
+        neighbor ineighshortest, is a synthetic event
+bminuse - in itad=1 (newtad) mode, this is the lower bound on the minimum
+          barrier, which is used to define the stop time.  It will increase
+          as more time is spent in the state, but is never allowed to exceed
+          the lowest observed barrier.  With irecognize=1 and itad=1 in the
+          input deck, later visits to the same state will also benefit 
+          from this.
+timehigh - current high temperature time in the state
+timehistop - timehighstop - current stop time (with itad=1 (newtad mode), 
+             this will continuously decrease as bminuse increases
+tlowswpt - timelowswept - this is the current "protected" low T time in
+           this state
+tickshort - time of shortest-time tick mark on the low-T time line.
+tadtime - the total low-temperature TAD time for the entire run.
+          This only changes when a transition is accepted.
+nforce - number of force calls so far in the entire TAD run
+newforce - new number of force calls since last block
+
+Also - these lines normally begin with "blok :", but if a NEW jump (never
+before seen transition) has been observed in that block, the line will 
+start with "blokn:".  If an old jump is seen again, it will start with 
+"blokj:", and if it is now going to accept a transition, it will start
+with "bloka:"; if an event is accepted immediately upon entering a
+state, it will start with "blokai:"
+Thus, selective greps can be done. 
+
+

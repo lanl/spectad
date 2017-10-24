@@ -1,0 +1,86 @@
+al.doc - Al  potential, local volume form,  alpot22  run on SUN  4/1/87 
+26.98  !  mass in amu
+4.05   ! lattice constant
+
+parameters  (chi=3.85 percent rms)
+.138771  2.11756  1.48586  3.32315  5.55498  ! OPT'ED
+
+here is the output from the generation run:
+
+ entering genpot (version genpot3 afv 5/17/88)
+ file with thermodynamic data ( ) 
+ Title from thermo file:
+ al.thermo - reconstructed  5/5/88                                              
+
+ The Rose determination of F(rho) will use fcc        crystal:
+ azero =   4.05000 A  Ecoh =   3.3600 eV  B =   7.938D+11 erg/cm**3
+ mass of this element for .doc file =    26.98000 amu
+
+  Properties read in from the thermo file:
+                               exptl      tpfit
+ fcc c11 (uB)                1.143D+12     1.00
+ fcc c12 (uB)                6.192D+11     1.00
+ fcc c44 (uB)                3.162D+11     1.00
+ fcc evac (eV)               7.500D-01     1.00
+ bcc eabove (eV)            -3.360D+00     1.00
+ hcp eabove (eV)            -3.360D+00     1.00
+ diatomic azero (A)          2.470D+00     1.00
+ diatomic ecoh (eV)          1.600D+00     1.00
+ name of potential (e.g. si1) ( )  
+ trpfun files for this pot will be named al
+ Now we will read in the  5 initial variables
+ varin(i) (  0.0000D+00) max iterations (0=printout) (     0) for fcc a    xtal, 22 neighbor groups out to r=  4.795832 *rnn
+ for bcc a    xtal, 24 neighbor groups out to r=  4.760952 *rnn
+ for hcp a    xtal, 48 neighbor groups out to r=  4.830459 *rnn
+ for diamonda xtal, 29 neighbor groups out to r=  6.324555 *rnn
+ for fccvac/4 xtal, 13 neighbor groups out to r=  3.605551 *rnn
+ using rcut=  5.5550 and npow=20 cmax(rho,ecl)= -4.59D-04  2.36D-03
+ xtlmin results for crystal type fcc a   :
+   azero=  4.0500  ecoh =  -3.360 ev/atom  de/dazero = -1.29D-06
+   vacancy formation energies(ev):   7.284D-01
+   atomic energies(ev): -3.360D+00
+   rhobar array (a**-3):  5.494D-01
+  elastic constants:  dyn/cm**2   ev/angst**3
+      c11 = cxxxx =  1.0753D+12    6.7119D-01
+      c12 = cxxyy =  6.5349D+11    4.0791D-01
+      c44 = cxyxy =  3.2190D+11    2.0093D-01
+   b=(c11+2c12)/3 =  7.9409D+11    4.9567D-01
+
+  properties of homonuclear diatomic:
+  (iter =  6  last dr =  4.17D-06  grad = -1.06D-06)
+  rmin =  2.4458 angst,  e =-0.056750 hartree =  -35.61 kcal
+ chi,var: 3.36D+00  1.388D-01 2.118D+00 1.486D+00 3.323D+00 5.555D+00
+  
+  
+ Summary of genpot fit
+
+ Base name for trpfun pot files = al
+
+ Rose function information:
+   ixtl = 1  a0 =    4.0500 A  Ecoh =    3.3600 eV  B =   7.938D+11 uB
+   eps =  7.5394D-02  ascut =   4.411D+00  dlamb =   2.130D-01
+
+ Goodness of fit to properties below: sqrt(chisq) =  3.362D+00
+ Vars:  1.38771D-01  2.11756D+00  1.48586D+00  3.32315D+00  5.55498D+00
+
+   property                   exptl      calc'd      tpfit     %dev    chisq
+ fcc azero (A)                          4.050D+00
+ fcc ecoh (eV)                          3.360D+00
+ fcc bmod (uB)                          7.941D+11
+ fcc c11 (uB)               1.143D+12   1.075D+12     1.00    -5.92    0.004
+ fcc c12 (uB)               6.192D+11   6.535D+11     1.00     5.54    0.003
+ fcc c44 (uB)               3.162D+11   3.219D+11     1.00     1.80    0.000
+ fcc evac (eV)              7.500D-01   7.284D-01     1.00    -2.87    0.001
+   
+ bcc azero (A)                          3.252D+00
+ bcc ecoh (eV)                          3.286D+00
+ bcc eabove (eV)           -3.360D+00  -3.286D+00     1.00    -2.19    0.000
+   
+ hcp azero (A)                          4.062D+00
+ hcp ecoh (eV)                          3.341D+00
+ hcp eabove (eV)           -3.360D+00  -3.341D+00     1.00    -0.57    0.000
+   
+ diatomic azero (A)         2.470D+00   2.446D+00     1.00    -0.98    0.000
+ diatomic ecoh (eV)         1.600D+00   1.544D+00     1.00    -3.49    0.001
+   
+ CPU (sec): tot =       7.3 delta =      7.3  Fri Jun 17 12:28:03 1988   t12-c10

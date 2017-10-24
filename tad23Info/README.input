@@ -1,0 +1,384 @@
+This README file discusses the input deck.  It explains what all of
+the parameters mean.
+
+
+Example input deck:
+**********************************************************************
+tetramer casename 
+ag       potnam(1) - EAM potential name for atom type 1
+xx       potnam(2) - EAM potential name for atom type 2
+10       naccept - number of accepted transitions
+1.d10    tadtimestop - low temperature time to stop TAD run at (seconds)
+400.     low temperature (ignored if not in tad mode)
+750.     high temperature
+0        ivariabletemp - adjust high temperature based on minimum barrier (itad=2 or 7 only)
+750.     temphighmax - maximum high temperature if ivariabletemp=1
+5.d11    prefacmin - assumed minimum prefactor
+0.01     uncertainty delta - confidence level of getting correct event
+0        ietype - energy expression (0=EAM)
+304      natom - number of atoms
+154      nmove - number of moving atoms
+500      nmd - number of MD steps per block 
+20       nmdsub - subdivision of nmd to store trajectory for refining
+1000     nwarm - number of steps to warm a cold trajectory
+500      nthermalize - number of steps to thermalize (randomize) a trajectory
+250      nblack - number of steps to blackout after a transition (rethermalize)
+1        ibadignore - ignore failure of warmup or blackout steps
+4.d-15   dt - MD time step (seconds)
+1.d12    thermrate - Langevin coupling constant (inverse seconds)
+-414230  iseed - use zero if you want a random seed each time
+6000     nsteep1 - maximum number of steepest descent steps at each new basin
+6000     nsteep2 - maximum number of steepest descent steps to check for transition
+0        ifundc - minimization method for transition detection (0=steepest decent, 1=quickmin, etc)
+300      tqtempmax - max temp for thermal quench, ifundc=5 only
+0.1      tqrate - temp quench rate (K/dt), ifundc=5 only
+0        ivineyard - calculate vineyard prefactors
+0        irotalign - 0=no rotate, 1=rotate into alignment before transition check, 2=rotate only z
+1.0d0    gfac - steepest-desc. factor (1.0 works well for EAM)
+0.6d0    transcrit - distance criteria for transition detection
+0        itranscrit - method for determining transition (0=distance,1=coordination,2=rcut coord,3=full bonding)
+0        ndimer - number of dimers to do for every new state
+0        ndimeretad - number of dimers to do for unequivalent states in dimeretad modes
+2        idimerdof - method for randomizing initial dimer points
+0        ndimerdof - number of dof to include in initial dimer points for idimerdof=1 only
+3.0d0    rdimerdist - distance to count coordination for dimers
+8        ndimercoord - coordination that defines over or under coordination
+1        idimeroverunder - if dimer should displace atoms that are 0=over, 1=under, or 2=both coordinated
+0.22d0   rdimerdisp - size of displacements in dimer
+.true.   lstore_min - store minimum of each state
+.true.   lstore_minunpbc - store <casename>.unpbc.<itrans>.dat files
+.true.   lstore_attempt - store all attempted transitions
+.true.   lstore_sad - store saddle points
+.true.   lstore_end - store all end points, including dimer
+.true.   lstore_dimer - store dimer saddle points
+.true.   lstore_neb - store initial and final neb files
+.false.  lstore_attempt_chs - store snapshot of attempted transitions, in chs format
+6        ipr - printout level
+5.d-8    dvcrit - energy (h) conv. crit; 5.d-8 is good for EAM
+1.d-4    gcrit  - total grad length (h/A) conv. crit; 1.d-4 is good for EAM
+1.d-5    drcrit - single-atom displacement (A) conv. crit; 1.d-5 is good for EAM
+0        itad - tad mode to run in (0=plain)
+1        irecognize - previous state recognition level, only partially used
+0        ireadstates - read in state files from previous runs?
+21       nimage - NEB parameter: number of images in chain
+0        ifunneb - minimization method for neb (0=steepest decent, 1=quickmin)
+1        itan - NEB parameter: tangent method to use
+1        iclimb - NEB parameter: 1=use climbing image, 0=no
+0.1d0    springk - NEB parameter: spring constant
+0.005d0  eshallow - NEB parameter: maximum barrier to not resolve
+0.0d0    hotmix - fraction of hot trajectory to mix in initial NEB
+0        inebdimer - 1=launch dimer from top of NEB
+0        inebirc - 1=ignore roll check in NEB
+0.0d0    ereverse - size of reverse barriers to ignore
+**********************************************************************
+
+Meaning of parameters:
+
+casename: Name for this TAD run.  casename is the filename prefix
+for all files associated with this run:
+  <casename>.start  - starting configuration (required)
+  <casename>.input  - input data file (recommended name)
+  <casename>.lis    - output listing file (recommended name)
+  <casename>.min.0.dat - minimum of the initial state
+  <casename>.min.<istate>.dat - minima of the states visited by accepted transitions
+  <casename>.<istate>.sad.<isad>.dat - saddles for all pathways observed
+
+potnam(1): If using EAM potentials, this is the name of the the
+potential for type 1.
+
+potnam(2): If using EAM potentials, this is the name of the the
+potential for type 2.
+
+naccept: The number of transitions to accept, after which the program
+will stop.
+
+tadtimestop: The run will stop if either this, or naccept are reached.
+tadtimestop is the total low-T time in seconds.
+
+low temperature: The system temperature, the temperature to which
+event times are extrapolated and at which the evolution of the system
+occurs.
+
+high temperature: The elevated temperature at which basins are
+explored and transitions are found, to then be extrapolated to the low
+temperature.
+
+ivariabletemp: If ivariabletemp=1, then the high temperature is set
+based upon the minimum barrier (found by dimer) for the state.
+
+temphighmax: The maximum possible temperature to set for any state if
+ivariabletemp=1. 
+
+prefacmin: The minimum prefactor in the system.  This should be chosen
+so that all prefactors in the system are higher than this, but not so
+low that all efficiency is lost.  For metal surface diffusion systems,
+1.d11 is a very safe value.
+
+uncertainty delta: The uncertainty associated with the claim that when
+a transition is accepted by TAD, it is the right one.  I.e., with
+confidence of at least 1-delta, we can say that continuing the
+high-temperature trajectory in this state would not lead to any
+transition that would extrapolate to a shorter time at low
+temperature, provided that prefacmin is a lower bound on all the
+prefactors for escape paths out of this state.  Decreasing delta by a
+factor of 10 will slow the simulation down by at most a factor of
+ln(10).
+
+ietype: Energy type.  This determines which type of interatomic
+potential functions is employed.  Currently, 
+  0 =EAM
+  27=Tersoff
+  67=airebo
+  68=meam
+  69=tight binding
+  70=albe tersoff
+  71=2 component stillinger-webber
+  72=shell model
+  73=tight binding
+
+natom: Number of atoms in the <casename>.start file.
+
+nmove: Number of moving atoms in the <casename>.start file.  The
+moving atoms must be first in the list.
+
+nmd: Number of MD steps to take per block.  Checks for transitions
+occur at the end of each block.
+
+nmdsub: Number of MD steps in sub-division of nmd for which to store
+snapshots of the system, for refining the moment of transitions.
+
+nwarm: Number of MD steps used to warm a cold configuration.
+
+nthermalize: Number of MD steps to warm when continuing a trajectory
+from a cold intermediate state.  Used only in conjunction with nwarm,
+may be obsolete.
+
+nblack: Number of MD steps in the "black out" period after a
+transition has been detected. During this time, transitions are
+rejected -- their times are not extrapolated to low temperature.  The
+purpose of this time is to let the trajectory to wander enough to be
+statistically independent from the trajectory that just found a
+transition.
+
+ibadignore: If ibadignore=1, ignore the fact that either warming up or
+blacking out wasn't able to complete without a transition.  The number
+of warming up or blacking out blocks to attempt before giving up and
+moving on is hardwired in the code.
+
+dt: The MD time step in seconds.
+
+thermrate: The Langevin coupling constant in inverse seconds.
+
+iseed: The random number generator seed.  Use 0 for a random seed.  A
+run can be reproduced exactly if it is started again with iseed set to
+the random number seed that is printed out at the beginning.
+
+nsteep1: The maximum number of steepest descent steps done at each new
+basin.  If this number is reached, the minimization did not converge.
+Currently, the program will print out a warning if this is reached,
+but will proceed as if it converged.  User should check if they are
+satisfied that the program continued on.  This is also used for NEB
+minimization steps.
+
+nsteep2: The maximum number of steepest descent steps done to check
+for a transition.If this number is reached, the minimization did not
+converge.  Currently, the program will print out a warning if this is
+reached, but will proceed as if it converged.  User should check if
+they are satisfied that the program continued on.
+
+ifundc: Minimization method for minimizing geometries, currently
+  0=steepest decent
+  1=quickmin
+  2=conjugate gradients
+  3=adaptive conjugate gradients (not fully debugged)
+  4=adaptive conjugate gradients 2 (not fully debugged)
+  5=simulated annealing
+
+tqtempmax: Temperature at which to start the simulated annealing
+quenches, only used if ifundc=5.
+
+tqrate: Rate at which to lower the simulated annealing temperature,
+only used if ifundc=5.
+
+ivineyard: Flag to calculate Vineyard prefactors.  Currently,
+  0=don't do any vineyard prefactors. 
+  1=compute Vineyard frequency (full harmonic prefactor) for every
+    pathway ever found, using all nmove atoms to compute the Hessian. 
+  2=compute Vineyard frequency using only the atoms that moved larger
+    than rdynmatcrit (hardwired to be 0.01d0 for now).
+
+irotalign: Flag to turn on rotation alignment, important when the
+system is free to move or rotate in space.  Currently, 
+  0=off
+  1=rotate all dimensions
+  2=rotate along z only.
+
+gfac: The steepest descent factor (change in position = gfac*force)
+
+transcrit: Transition criterion parameter.  If itranscrit=0, this
+determines how far away each atom in a minimized state must be from
+the same atom in the current state to be considered a different state.
+If itranscrit=1, this is the cutoff for counting neighbors.
+
+itranscrit: Transition detection mode.  Currently,
+  0=transitions are determined by the maximum distance distance (set
+    by transcrit) any atom has moved between two configurational
+    minima.   
+  1=transitions are determined by a change in coordination defined by 
+    the radius set by transcrit.  
+  2=transitions are determined by a change in coordination, as in 1,
+    but the coordination is determined by the cutoffs of the
+    potential.   
+  3=transitions are determined by changes in bonding partners and bond
+    lengths (in some sense, a more sophisticated version of 1).
+
+ndimer: Number of dimer searches to do, most useful for filling in
+neighbor arrays.
+
+ndimeretad: Number of dimer searches to do in dimeretad mode, when the
+goal is just to find the minimum barrier, not most of the events.
+
+idimerdof: Method for randomizing initial dimer points.  Currently,
+  1=randomize the first ndimerdof degrees of freedom
+  2=pick an atom at random, displace it and it's neighbors (which atom
+    to be picked is defined by rdimerdist, ndimercoord, and
+    idimeroverunder) 
+
+ndimerdof: If idimerdof=1, number of degrees of freedom to include
+when randomizing the initial position of the dimer searches (first in
+list) e.g., 12 = first 4 atoms.  Otherwise, this is ignored.
+
+rdimerdist: Radius for counting coordination for determining which
+atoms are over/under coordinated.
+
+ndimercoord: Coordination criteria to determine what coordination is
+over or under.
+
+idimeroverunder: What type of atoms to include in dimer displacements:
+  0=over coordinated
+  1=under coordinated
+  2=both over and under coordinated.
+
+rdimerdisp: Size of gaussian displacements to move atoms selected by
+dimer selection criteria.
+
+lstore_min: Logical variable deterimining whether
+<casename>.min.<istate>.dat files are stored.  Very strongly
+recommended -- these represent the state trajectory the system
+follows, which is usually the key result of the simulation.
+
+lstore_minunpbc: Logical variable deterimining whether
+<casename>.min.unpbc.<istate>.dat files are stored.  These are useful
+if it is important to document absolute distances atoms have moved
+during a simulation (e.g., to determine a diffusion constant).
+
+lstore_attempt: Logical variable to determine if attempted transition
+geometry files are stored.  May lead to lots of files.
+
+lstore_sad: Logical variable to determine if saddle point geometries
+are stored.  Strongly recommended.
+
+lstore_end: Logical variable to determine if end points of transitions
+are stored.  Recommended.
+
+lstore_dimer: Logical variable to store dimer saddle points.
+
+lstore_attempt_chs: Logical variable to determine if the trajectories
+during which events were detected should be written, in chs format.
+
+ipr: Printout level.  Smaller values mean less output.  Currently, 10
+is the maximum level of output and outputs everything.  As of
+10/10/02, level 4 is the recommended novice setting and 3 is the
+recommended normal setting.  See the readme file for description of
+the "blok" output that you can grep for in the listing.
+
+dvcrit: Energy criterion (Hartree) for steepest descents.  The change
+in energy between two steps must be less than this value to be
+considered converged.
+
+gcrit: Gradient criterion (Hartree/A) for steepest descents.  The
+magnitude of the total gradient must be less than this value to be
+considered converged.
+
+drcrit: Position criterion (A) for steepest descents.  The change in
+position of any given atom must be less than this value to be
+considered converged.
+
+itad: TAD mode to run in.  
+  0=regular TAD
+  1=new TAD (learning from the past or Emin TAD, see F. Montalenti and
+    A.F. Voter, JCP 116, 4819 (2002)).
+  2=Dimer-based minimum-barrier method.  Note that this is approximate
+    since the random dimer searches are not guaranteed to find the
+    lowest barrier. See Henkelman and Jonsson, JCP 1999, JCP 2001, and
+    Montalenti and Voter, JCP 2002. 
+    - requires ndimer>0
+  3=Use minimum-barrier method with a fixed value for the Emin -
+    requires nonzero value for fixedbarriermin. This can be powerful
+    for certain types of studies in which the lowest possible barrier
+    is already known for all states.  However, if this not actually
+    true, then the dynamics will be wrong. 
+  4=Prefactor-TAD (working name: ptad) using Vineyard prefactors 
+    - requires ivineyard=1
+    - much more powerful if states are revisited, and irecognize is
+      turned on 
+  5=Prefactor-TAD using a fixed prefactor
+    - requires a nonzero value for fixedprefac 
+    - much more powerful if states are revisited, and irecognize is
+      turned on 
+    - should also work with iequivcheck=1
+  6=Synthetic mode tad "synthtad".  This combines regular tad with 
+    synthetic mode.  There will be other synthetic based modes as
+    well, but this is the first try.
+  7=Synthetic mode tad "synthdimeretad".  This combines dimer-based
+    minimum-barrier tad with synthetic mode.
+
+irecognize: Mode for state recognition.  
+  0=no state recognition.
+  1=state recognition.  This is now the recommended setting.
+
+ireadstates: If ireadstates=1, read in state files from a previous run
+(scan for state files in current directory with same case name).
+
+nimage: Number of images to use when doing nudged elastic band (NEB)
+calculations.
+
+ifunneb: Method for minimizing NEB.  Currently, 
+  0=steepest descent
+  1=quickmin.
+
+itan: NEB parameter to determine what tangent to use.  
+  0=angle bisection
+  1=new tangent of Henkelman and Jonsson.
+
+iclimb: NEB parameter to determine whether to use the climbing image
+algorithm of Henkelman, Uberuaga and Jonsson.  
+  0=no
+  1=yes.
+
+springk: NEB parameter.  The spring constant between images, in
+Hartrees/Angstrom^2.
+
+eshallow: NEB parameter.  The minimum barrier required between an
+intermediate state and an endpoint to consider the intermediate state
+a unique state.
+
+hotmix: If nonzero, this is the fraction of a hot trajectory to mix in
+when setting up the initial nudged elastic band (NEB) chain.  The 'hot
+trajectory' means a path from the reactant minimum to the last saved
+point that is still in the state to the first point that is outside
+the state, and then finally to the product minimum.  The saved points
+are based on nmdsub.  For example, if nmdsub=20 and nmd=200, there are
+10 saved points.
+
+inebdimer: If this is nonzero, launch a dimer search to finish
+converging NEB.
+
+inebirc: If inebirc=1, have NEB ignore roll checks it does from
+saddles to see if they connect to correct states.  Useful if the
+potential surface is littered with local minima that might cause the
+roll check to fail.
+
+ereverse: Reverse barrier (barriers that return back to the current
+state) size to ignore.  Useful if local minima litter the potential
+that TAD should ignore.  Experimental and not fully debugged.

@@ -1,0 +1,6 @@
+ni.doc - Ni  potential, local volume form,  nipot22  run on SUN  4/1/87 
+58.71  !  mass in amu
+3.52   ! lattice constant
+
+parameters  (chi=0.751 percent rms)
+.056359  2.2053  1.7728  3.6408  4.7895  

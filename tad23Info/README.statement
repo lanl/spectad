@@ -1,0 +1,55 @@
+Remarks on the use of the TAD program:
+
+We hope you will find this TAD program useful for your problem of
+interest.  We have tried to make it fairly robust, general and easy to
+use.  It is a work in progress, however, so we cannot guarantee it is
+bug-free, nor can we guarantee that it will work smoothly for your
+application.  Please proceed carefully, watching for behaviors that
+don't make sense or that might indicate that the underlying
+approximations are not good for your problem.  Please don't hesitate
+to contact us with questions.  We want the code to work well for you,
+and the feedback about things it might be doing wrong (or could do
+better) will help us to develop a better code.
+
+During most of our development, we have focused on surface-diffusion
+and growth problems using embedded-atom (EAM) potentials for fcc
+metals.  For this kind of system TAD seems to work pretty well.  More
+recently, we have been looking at carbon-nanotube systems, so some new
+features have been added to the program, such as for treating systems
+that are free to rotate and for detecting transitions based on bond
+counts.
+
+There is one specific type of difficulty we have observed a number of
+times now, both in our own research as we try applying TAD to new
+kinds of systems, and in helping other groups use it for their
+problems.  For systems that have lots of local minima, TAD becomes
+much less efficient.  This happens, for example, for most of the
+classical silicon potentials.  These shallow minima may decorate
+deeper basins corresponding to significant transitions, but TAD does
+not understand that, so much time is wasted finding, and residing in,
+each new local minimum, resulting in a low overall boost factor.
+Moreover, potentials with this characteristic (which is often
+unphysical, as near as we can tell, since first-principles treatments
+usually don't show all these minima) cause trouble for the nudged
+elastic band stage.
+
+We have been giving a lot of thought lately to how to make TAD more
+efficient for this kind of system.  In principle, one could simply
+specify a threshold minimum barrier height, asking it to ignore all
+lower barriers, so that states connected by barriers lower than the
+threshold are considered to be the same state.  However, implementing
+this in a clean way is difficult, so, currently, the program does not
+do anything of this sort.  We are currently at work on improvements to
+the program that will allow some level of this kind of treatment,
+though a full treatment, mapping out the connectivity of all states,
+is still somewhat down the road.  These improvements will be available
+in a future version of the code.
+
+We are always looking to improve the code, both by adding new
+functionality (alternative algorithms for minimizing or for finding
+saddles, for example), so please send us any suggestions for improving
+any aspect of the code.
+
+
+
+

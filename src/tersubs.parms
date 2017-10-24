@@ -1,0 +1,57 @@
+ 1830.8d0     ! A   ! silicon (-4.6296 eV/atom)
+  471.18d0    ! B
+    2.7d0     ! R 
+    3.0d0     ! S
+    2.4799d0  ! lambda1
+    1.7322d0  ! lambda2 (also called mu)
+    1.1000d-6 ! beta
+    0.78734d0 ! n
+    1.0039d5  ! c
+   16.217d0   ! d
+   -0.59825d0 ! h
+ 1393.6d0     ! A   ! carbon  (-7.3683 eV/atom)
+  346.7d0     ! B
+    1.8d0     ! R
+    2.1d0     ! S
+    3.4879d0  ! lambda1
+    2.2119d0  ! lambda2 (also called mu)
+    1.5724d-7 ! beta
+    7.2751d-1 ! n
+    3.8049d4  ! c
+    4.3484d0  ! d
+   -0.57057d0 ! h
+ 1769.0d0     ! A   ! germanium
+  419.23d0    ! B
+    2.8d0     ! R
+    3.1d0     ! S
+    2.4451d0  ! lambda1
+    1.7047d0  ! lambda2 (also called mu)
+    9.0166d-7 ! beta
+    7.5627d-1 ! n
+    1.0643d5  ! c
+    1.5652d1  ! d
+   -0.43884d0 ! h
+    0.9776d0  ! chi(C-Si) ! cross-parms
+    1.0d0     ! omega(C-Si)
+    1.00061d0 ! chi(Si-Ge)
+    1.0d0     ! omega(Si-C)
+    1.00000d0 ! chi(C-Ge) to give coh. en. > 0 for GeC and <0 for "
+    1.0d0     ! omega(C-Ge)
+
+
+!!!NOTE: these parameters from J. Tersoff, PRB 39, 5566 (1989)
+
+c This SOFTWARE  has been authored  by an employee   or employees of the
+c University  of  California, operator    of the  Los   Alamos  National
+c Laboratory  under Contract No. W-7405-ENG-36  with the U.S. Department
+c of  Energy.   The U.S. Government  has  rights to use,  reproduce, and
+c distribute this SOFTWARE.   The  public may copy,  prepare  derivative
+c works and publicly display this SOFTWARE without charge, provided that
+c this  Notice  and any statement  of  authorship are  reproduced on all
+c copies.  Neither the Government nor the University makes any warranty,
+c express or implied, or assumes any liability or responsibility for the
+c use  of this SOFTWARE.  If SOFTWARE  is modified to produce derivative
+c works, such  modified SOFTWARE should be clearly  marked, so as not to
+c confuse it with the version available from LANL.
+
+

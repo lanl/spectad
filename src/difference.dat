@@ -1,0 +1,208 @@
+137a138
+>           real*8, PARAMETER  ::  timehighnownewmax = 1.d-6 ! Dont accumulate too mch thigh time (might be causing a problem??)
+260d260
+<             allocate(ma_timelownow(nofficialmax))
+262d261
+<             ma_timelownow(:) = 0.d0
+272,273c271
+<                 !statedata(istate)%timehighnow = 0.d0
+<                 !statedata(istate)%timelownow = 0.d0
+---
+>                 statedata(istate)%timehighnow = 0.d0
+285d282
+<                 statedata(istate)%timelownow = 0.d0
+374c371
+<      +          ((mxatom2-natomfixed)*3+8+2*nofficialmax)*lp_avail))
+---
+>      +          ((mxatom2-natomfixed)*3+7+nofficialmax)*lp_avail))
+662d658
+<                   timelownowold = ma_timelownow(istate)
+665c661,665
+<                     timelownownew  = timelownowold  + messagebuffer(9)
+---
+> !                    write(*,*) 'SpawnID ',spawnrunning(i)
+> !     +               ,' PRODUCING timehighnow = ',timehighnownew
+> !     +               ,' to MANAGER for istate ',istate
+> !     +               ,' (timehighold = ',timehighnowold,')'
+> !                     call flushtad(6)
+668d667
+<                     timelownownew  = 0.d0
+674a674,676
+>                   if(timehighnownew.gt.timehighnownewmax)then
+>                     timehighnownew = timehighnownewmax
+>                   endif
+676d677
+<                   ma_timelownow(istate)  = timelownownew
+851,852c852,853
+<               startmes_buf((msgdest-1)*(nmovemax*3+8+2*nofficialmax)+1)
+<      +                                        = spawnwaiting_nmove(1)
+---
+>               startmes_buf((msgdest-1)*(nmovemax*3+7+nofficialmax)+1) =
+>      +                                        spawnwaiting_nmove(1)
+854c855
+<                 startmes_buf((msgdest-1)*(nmovemax*3+8+2*nofficialmax)
+---
+>                 startmes_buf((msgdest-1)*(nmovemax*3+7+nofficialmax)
+857c858
+<               startmes_buf((msgdest-1)*(nmovemax*3+8+2*nofficialmax)
+---
+>               startmes_buf((msgdest-1)*(nmovemax*3+7+nofficialmax)
+859c860
+<               startmes_buf((msgdest-1)*(nmovemax*3+8+2*nofficialmax)
+---
+>               startmes_buf((msgdest-1)*(nmovemax*3+7+nofficialmax)
+861c862
+<               startmes_buf((msgdest-1)*(nmovemax*3+8+2*nofficialmax)
+---
+>               startmes_buf((msgdest-1)*(nmovemax*3+7+nofficialmax)
+864c865
+<               startmes_buf((msgdest-1)*(nmovemax*3+8+2*nofficialmax)
+---
+>               startmes_buf((msgdest-1)*(nmovemax*3+7+nofficialmax)
+889,891c890,892
+<                  imess_size = nmove*3+8
+<                  startmes_buf
+<      +           ((msgdest-1)*(nmovemax*3+8+2*nofficialmax)+nmove*3+6) =
+---
+>                   imess_size = nmove*3+7
+>                   startmes_buf
+>      +            ((msgdest-1)*(nmovemax*3+7+nofficialmax)+nmove*3+6) =
+893,894c894,895
+<                  startmes_buf
+<      +           ((msgdest-1)*(nmovemax*3+8+2*nofficialmax)+nmove*3+7) =
+---
+>                   startmes_buf
+>      +            ((msgdest-1)*(nmovemax*3+7+nofficialmax)+nmove*3+7) =
+896,898d896
+<                  startmes_buf
+<      +           ((msgdest-1)*(nmovemax*3+8+2*nofficialmax)+nmove*3+8) =
+<      +                                      ma_timelownow(istatespawn)
+902,906c900,901
+<                   startmes_buf((msgdest-1)*(nmovemax*3+8+2*nofficialmax)
+<      +                  +nmove*3+8+idum) = ma_timehighnow(idum)
+<                   startmes_buf((msgdest-1)*(nmovemax*3+8+2*nofficialmax)
+<      +                  +nmove*3+8+idum+nofficialmax) 
+<      +                  = ma_timelownow(idum)
+---
+>                    startmes_buf((msgdest-1)*(nmovemax*3+7+nofficialmax)
+>      +                  +nmove*3+7+idum) = ma_timehighnow(idum)
+908c903
+<                  imess_size = imess_size + 2*nofficialmax
+---
+>                  imess_size = imess_size + nofficialmax
+917,919c912,914
+<      +        startmes_buf((msgdest-1)*(nmovemax*3+8+2*nofficialmax)+1),
+<      +        imess_size,MPI_REAL8,msgdest,start_tag1,
+<      +        MPI_COMM_WORLD,start_req(msgdest),ier)
+---
+>      +         startmes_buf((msgdest-1)*(nmovemax*3+7+nofficialmax)+1),
+>      +         imess_size,MPI_REAL8,msgdest,start_tag1,
+>      +         MPI_COMM_WORLD,start_req(msgdest),ier)
+1317,1318c1312,1313
+<              if((ibuffsize.gt.(nmove*3+5)).and.(irecognize.gt.0))then
+<                istate = NINT(message_buf(nmove*3+6))
+---
+>              if((ibuffsize.gt.(1+nmove*3+4)).and.(irecognize.gt.0))then
+>                istate = NINT(message_buf(1+nmove*3+5))
+1328,1330c1323
+<      +                                       = message_buf(nmove*3+7)
+<                    statedata(istate)%timelownow
+<      +                                       = message_buf(nmove*3+8)
+---
+>      +                                       = message_buf(1+nmove*3+6)
+1333,1335c1326,1327
+<                if(ibuffsize.gt.(nmove*3+8))then
+<                  nstaterd = (ibuffsize-(nmove*3+8))
+<                  do idum = 1, nstaterd
+---
+>                if(ibuffsize.gt.(nmove*3+7))then
+>                  do idum = 1, (ibuffsize-(nmove*3+7))
+1339,1341c1331
+<      +                            message_buf(nmove*3+8+idum+0*nstaterd)
+<                      statedata(idum)%timelownow =
+<      +                            message_buf(nmove*3+8+idum+1*nstaterd)
+---
+>      +                            message_buf(nmove*3+7+idum)
+1531c1521
+<      +                  ,istate,lfirstinstate,lstillsynth,timelowshift
+---
+>      +                  ,istate,lfirstinstate,lstillsynth
+1536c1526
+<          real*8 messagebuffer(9)
+---
+>          real*8 messagebuffer(8)
+1570c1560
+<              imess_size = 9
+---
+>              imess_size = 8
+1572d1561
+<              messagebuffer(9) = timelowshift
+1730,1735c1719,1724
+< !               if(ibuffsize
+< !     +           .gt.(j_start+(nneigh+1)*natom*3))then
+< !                 timehighnow = statebuf(j_start+(nneigh+1)*natom*3+1)
+< !               else
+< !                 timehighnow = 0.d0
+< !               endif
+---
+>                if(ibuffsize
+>      +           .gt.(j_start+(nneigh+1)*natom*3))then
+>                  timehighnow = statebuf(j_start+(nneigh+1)*natom*3+1)
+>                else
+>                  timehighnow = 0.d0
+>                endif
+1831,1834c1820,1823
+<                  !if(timehighnow.gt.statedata(istate)%timehighnow)then
+<                  !  ! Accumulated Simulation Time:
+<                  !  statedata(istate)%timehighnow = timehighnow
+<                  !endif
+---
+>                  if(timehighnow.gt.statedata(istate)%timehighnow)then
+>                    ! Accumulated Simulation Time:
+>                    statedata(istate)%timehighnow = timehighnow
+>                  endif
+1869,1870c1858
+<                  statedata(istate)%timehighnow = 0.d0
+<                  statedata(istate)%timelownow = 0.d0
+---
+>                  statedata(istate)%timehighnow = timehighnow
+2168,2169c2156,2165
+<         timelowprev = statedata(istate)%timelownow
+<         tickprev = timelowprev
+---
+>         if(timehighnow.ge.(dt*real(nmd,8)))then
+>           timehighprev = 0.d0
+>           timelowprev =(timehighnow*fstar)**(betalow/betahigh)/fstar
+>           tickprev = timelowprev
+>         else
+>           timehighnow = 0.d0
+>           timehighprev = 0.d0
+>           timelowprev = 0.d0
+>           tickprev = 0.d0
+>         endif
+2257,2259c2253,2254
+<              tickprev = statedata(istate)%timelownow
+< !             tickprev = (1.d0/fstar)
+< !     +              *(timehighnow*fstar)**(betalow/betahigh)
+---
+>              tickprev = (1.d0/fstar)
+>      +              *(timehighnow*fstar)**(betalow/betahigh)
+2321,2322c2316
+<                !if(dthigh_tmp.lt.(dt*real(nmd_skip,8)))then
+<                if(dthigh_tmp.lt.dt)then
+---
+>                if(dthigh_tmp.lt.(dt*real(nmd_skip,8)))then
+2452d2445
+<                  statedata(istate)%timelownow  = 0.d0
+2501,2505c2494,2498
+<                !j_start = j_start + (nneigh+1)*natom*3
+<                !timehighnow = statebuf(j_start+1)
+<                !if(timehighnow.gt.statedata(istate)%timehighnow)then
+<                !  statedata(istate)%timehighnow = timehighnow
+<                !endif
+---
+>                j_start = j_start + (nneigh+1)*natom*3
+>                timehighnow = statebuf(j_start+1)
+>                if(timehighnow.gt.statedata(istate)%timehighnow)then
+>                  statedata(istate)%timehighnow = timehighnow
+>                endif

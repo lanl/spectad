@@ -1,0 +1,205 @@
+-----------readme file for portapot.tar----------
+
+readme - description of portable EAM potential package stored in portapot.tar
+         Art Voter, 10/24/98. 
+         Last changed 9/19/02 - now has all 7 fcc potentials, ni3-al3 and cu1-ag1
+         and both the LA-UR document and the original MRS Voter-Chen paper 
+         as pdf files. 
+         [afv@lanl.gov, (505) 667-6198] 
+
+A number of EAM potentials are included here in text 
+format (indicated by the appended "t" on the file name).  
+If you are setting up to use these potentials with one of 
+my programs, you will want them in binary format.
+My interpolation routines (trpsubs.f), which read the binary
+versions, are included in this package.  The test programs below
+may be helpful in seeing how to use routines.  (The esubs.f 
+was written long ago, but I think it is still good.  The trpsubs.f
+is my current version of the interpolation routines, as of 2/2000.)
+If you are going to adapt your own code to use the interpolation
+files, see the file-format information below.
+
+Reference/Citation information is at the end of this file.
+
+The potcong program converts potential files to or from 
+binary format.  Thus, running it on the machine
+where the potentials are to be installed will give
+potentials in the correct binary format for that machine.  
+The file potcong.dat contains the necessary commands to 
+convert all the potentials.
+Supply it as input to the potcong program.
+
+After conversion to binary, the potential for, say, nickel, 
+would be contained in the following files:
+  ni.phi  - the pair potential  (hartree vs. angstroms)  
+  ni.rho  - the density function   (density units vs. angstroms)
+  ni.f    - the embedding function (hartree vs. density units)
+  ni.doc  - text file with lattice const., mass, and other info.
+(I use 27.21 eV/hartree as my standard conversion factor.)
+
+You might then want to try the test programs below.
+
+Installation Procedure:
+-----------------------
+1) Ideally, the package of files should be on a 
+   subdirectory called  /.../pots
+
+   % gunzip portapot.tar.gz  (you already did this to get to here)
+   % tar xvf portapot.tar    (and this, too)
+
+2) compile the standalone program called "potcong.f"
+
+   % f77 potcong.f -o potcong      
+
+3) run the potcong program, supplying input data:
+
+   % potcong <potcong.dat          
+
+4) If desired, the text versions of the files (e.g., ni.rhot, 
+   ni.phit, ni.ft) can now be deleted, but this is not necessary.
+
+------
+
+Test Programs
+-------------
+
+There are two test programs.  They do not offer a comprehensive test, but
+they will probably fail, or give outputs that differs from the included
+test outputs, if the potential files are not properly installed.
+I wrote them many years ago, but they still seem to do their simple tasks
+correctly.
+
+
+1)  etest - simple energy test on Ni-Al (ni3-al3) potential 
+    to compile and link:   f77 etest.f esubs.f trpsubs.f -o etest
+    to run:     etest >etest.lis
+    to check:  compare etest.lis to etest.lis.ref
+
+2)  etestcu - simple energy test on cu potential
+    to compile and link:   f77 etestcu.f esubs.f trpsubs.f -o etestcu
+    to run:     etestcu >etestcu.lis
+    to check:  compare etestcu.lis to etestcu.lis.ref
+
+------
+
+Information about the file format if you are going to 
+use these potentials in your own interpolation routines:
+--------------------------------------------------------
+
+   A given potential consists of four files.  For example, for copper,
+they are
+                    cu.doc  - information about the pot, atomic mass, lattice constant.
+                    cu.phi  - phi(r) interpolation array
+                    cu.rho  - rho(r) interpolation array
+                    cu.f    - F(rhobar)  interpolation array
+
+I usually use a binary format, so the text versions of the interpolation 
+arrays are distinguished by a "t" at the end.
+  
+   Below is the text version of cu.phi (cu.phit), to demonstrate the format.
+The .rho and .f files are the same format as this.  Given a potential 
+interpolation file in this text format, you can run it through the potcong 
+program if you want binary format.
+
+First, the units:
+-----------------
+The .phi file is tabulated as hartree versus angstroms.  (use 1 h = 27.21 eV)
+The .rho file is density units versus angstroms.  (doesnt matter what density units)
+The .f file is hartree versus density units.
+
+
+Now, the content of the file, which tabulates values of y for a range
+of x.  Note (important) that the "zeroth" point (x0) and the last
+point (xn) are given for the x range, whereas the y values are those
+corresponding to x1 through xn.  I.e., there are n y values (y1,y2,...,yn), 
+with no y0 value given.
+
+line 1 [format(i10,3d20.12,2i5)]
+------
+  1) n
+  2) x0
+  3) xn
+  4) float(n)/(xn-x0)
+  5) iflo
+  6) ifhi
+
+lines 2 through end  [format(4d20.12)]
+-------------------
+  (y(i),i=1,n)
+
+The iflo and ifhi parameters (integers) are simply flags to tell the
+interp. routines what to do if the x values goes off the low or high
+end of the range (iflo refers to the low end, ifhi refers to the high end)
+ value
+   0  -  set to zero if it goes off this end
+   1  -  crash if it goes off this end
+   2  -  extrapolate linearly if it goes off this end
+
+
+
+--------------------cu.phit file starts on next line----------------------------
+      3000  0.100000000000D+01  0.496100000000D+01  0.757384498864D+03    1    0
+  0.366731515685D+01  0.364704783538D+01  0.362688734291D+01  0.360683312834D+01
+  0.358688464342D+01  0.356704134269D+01  0.354730268346D+01  0.352766812582D+01
+  0.350813713263D+01  0.348870916947D+01  0.346938370467D+01  0.345016020926D+01
+  0.343103815697D+01  0.341201702424D+01  0.339309629015D+01  0.337427543647D+01
+  0.335555394760D+01  0.333693131057D+01  0.331840701506D+01  0.329998055331D+01
+  0.328165142020D+01  0.326341911315D+01  0.324528313217D+01  0.322724297983D+01
+...  (563 lines removed) ...
+ -0.713847557557D-06 -0.621304849814D-06 -0.535121414546D-06 -0.455311376306D-06
+ -0.381888963462D-06 -0.314868508573D-06 -0.254264448690D-06 -0.200091325767D-06
+ -0.152363786972D-06 -0.111096585083D-06 -0.763045788380D-07 -0.480027332583D-07
+ -0.262061200849D-07 -0.109299180714D-07 -0.218941339074D-08  0.000000000000D+00
+--------------------end of cu.phit file----------------------------
+
+
+
+References:
+-----------
+These potentials are described in a few different papers,
+beginning with Ni and Al in Voter and Chen, 1987 [1].  
+The most complete description of the fitting procedure is
+in a chapter in a book on intermetallics [2].  This complete
+description can also be found in a Los Alamos technical
+report, along with the parameters for all seven fcc 
+potentials [3].  This technical report and the original Voter-Chen 
+paper are now included with this potentials package as pdf files.
+For the "cu" potential, please cite Ref. [4],
+which gives the parameters and cites the earlier papers
+(or, cite both Ref. [4] and Ref. [2]).
+For the silver potential ("ag"), please cite Refs. [5] and [2].
+For Pd, Pt, and Au, simply cite reference [3], or check with me
+for whether it has since been published in the regular literature.
+The cu1 and ag1 potentials are designed to work with each other
+for Cu-Ag alloy simulations.  The cross potential is simply fit
+to the heat of solution at infinite dilution for Cu in Ag and Ag in Cu.
+As pure elements (cu1, ag1), they work exactly like the cu and ag pots.
+These will be described in a paper (Sprague et al) that we think will 
+appear soon (writing this September of 2002) in Phys. Rev. B.
+If you are uncertain about how to cite a particular
+potential, don't hesitate to contact me.
+Also, if you are worried that your potential files have become corrupted,
+contact me for fresh ones.
+
+[1] A.F. Voter and S.P. Chen, Mat. Res. Soc. Symp. Proc. 
+    Vol. 82, 175 (1987).
+    "Accurate Interatomic Potentials for Ni, Al, and Ni3Al"    
+
+[2] A.F. Voter, in Intermetallic Compounds: Principles and Practice, 
+    edited by J.H. Westbrook and R.L. Fleischer,
+    (John Wiley and Sons, Ltd, 1995), Vol. 1, p. 77.
+    "The Embedded Atom Method"
+
+[3] A.F. Voter, Los Alamos Unclassified Technical Report LA-UR-93-3901.
+    "Embedded Atom Method Potentials for Seven FCC Metals:
+    Ni, Pd, Pt, Cu, Ag, Au, and Al,"                           
+
+[4] A.F. Voter, Phys. Rev. B, 57, 13985 (1998).
+    "Parallel Replica Method for Dynamics of Infrequent Events"
+
+[5] A.F. Voter, in Modeling of Optical Thin Films,
+    M.R. Jacobson, Ed., Proc. SPIE Vol. 821, 214 (1987).
+    "Simulation of the Layer-Growth Dynamics in Silver Films:  
+    Dynamics of Adatom Clusters and Vacancy Clusters on Ag(100)"
+
+-------------end of readme file for portapot.tar-----------------------

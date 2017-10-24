@@ -1,0 +1,6 @@
+al.doc - Al  potential, local volume form,  alpot22  run on SUN  4/1/87 
+26.98  !  mass in amu
+4.05   ! lattice constant
+
+parameters  (chi=3.85 percent rms)
+.138771  2.11756  1.48586  3.32315  5.55498  ! OPT'ED
