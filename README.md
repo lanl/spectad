@@ -32,9 +32,7 @@ THIS SOFTWARE IS PROVIDED BY LOS ALAMOS NATIONAL SECURITY, LLC AND CONTRIBUTORS 
 **OFFICIAL IDENTIFYING INFORMATION:**
 
 **Identifying Number**: C17142    
-**Software Name**:  SpecTAD     
-**Export Control Review Information**: DOC - U.S. Department of Commerce, EAR99    
-**B&R Code**:  KC0202030    
+**Software Name**:  SpecTAD       
 
 **DESCRIPTION:**
 
