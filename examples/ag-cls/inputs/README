@@ -1,7 +1,7 @@
 Note that this example uses ietype=0 - This means that the code will use your POTSDIR environment variable to find the EAM Ag potential files.
 If the code doesn’t work, there is a good chance that your POTSDIR variable is NOT correctly defined…
 
-Copy the contents of this inputs/ directory into your current wording directory (which should be ~/spectad/ag-cls/ for this example)
+Copy the contents of this inputs/ directory into your current wording directory (which should be ~/spectad/examples/ag-cls/ for this example)
 
 Then, the code can be executed using the following commend (with the appropriate mpirun command for your system):
 

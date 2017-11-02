@@ -2,7 +2,7 @@ Note that this example uses ietype=199 - This means that the code will not look 
 Instead, you must have a 'script.lmp' and potential files in the current working directory.
 (For this example, these files are included in the inputs/ directory)... 
 
-Copy the contents of this inputs/ directory into your current wording directory (which should be ~/spectad/ag-lmp/ for this example)
+Copy the contents of this inputs/ directory into your current wording directory (which should be ~/spectad/examples/ag-lmp/ for this example)
 
 Then, the code can be executed using the following commend (with the appropriate mpirun command for your system):
 
