@@ -264,7 +264,7 @@ Go back to `/example/COUPLE/fortran2/` directory in lammps, and copy over the ma
 
 ```
 cd lammps/example/COUPLE/fortran2
-cp ~/SpecTAD-modes/lammps-fortran-example/makefile .
+cp ~/SpecTAD/lammps-fortran-example/makefile .
 ```
  
 Change the makefile to have the correct compilers for your system, and build the fortran wrapper for the lammps interface:
