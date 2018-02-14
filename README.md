@@ -99,7 +99,7 @@ cd ~/spectad/pots/.
 Note: The next line requires that you use the specific fortran compiler setup for your machine. For example, <Fortran compiler> might be *`f77`* or *`gfortran`* on your machine:
 
 ```
-<Fortran-compiler> ../potcong.f -o potcong
+<Fortran-compiler> ../src/potcong.f -o potcong
 ./potcong <potcong.dat
 ```
 
