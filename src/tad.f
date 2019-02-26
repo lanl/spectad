@@ -14,15 +14,15 @@ c~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 c
 c  This software is open source software available under the BSD-3 license.
 c
-c  Copyright (c) 2017, Los Alamos National Security, LLC
+c  Copyright (c) 2019, Triad National Security, LLC
 c  All rights reserved.
 c
-c  Copyright 2017. Los Alamos National Security, LLC.
-c  This software was produced under U.S. Government contract DE-AC52-06NA25396
+c  Copyright 2019. Triad National Security, LLC.
+c  This software was produced under U.S. Government contract 89233218CNA000001
 c  for Los Alamos National Laboratory (LANL), which is operated by
-c  Los Alamos National Security, LLC for the U.S. Department of Energy.
+c  Triad National Security, LLC for the U.S. Department of Energy.
 c  The U.S. Government has rights to use, reproduce, and distribute this software.
-c  NEITHER THE GOVERNMENT NOR LOS ALAMOS NATIONAL SECURITY, LLC MAKES ANY WARRANTY,
+c  NEITHER THE GOVERNMENT NOR TRIAD NATIONAL SECURITY, LLC MAKES ANY WARRANTY,
 c  EXPRESS OR IMPLIED, OR ASSUMES ANY LIABILITY FOR THE USE OF THIS SOFTWARE.
 c  If software is modified to produce derivative works, such modified software
 c  should be clearly marked, so as not to confuse it with the version available from LANL.
@@ -34,11 +34,11 @@ c     this list of conditions and the following disclaimer.
 c  2. Redistributions in binary form must reproduce the above copyright notice,
 c     this list of conditions and the following disclaimer in the documentation and/or
 c     other materials provided with the distribution.
-c  3. Neither the name of Los Alamos National Security, LLC, Los Alamos National Laboratory,
+c  3. Neither the name of Triad National Security, LLC, Los Alamos National Laboratory,
 c     LANL, the U.S. Government, nor the names of its contributors may be used to endorse or
 c     promote products derived from this software without specific prior written permission.
 c
-c  THIS SOFTWARE IS PROVIDED BY LOS ALAMOS NATIONAL SECURITY, LLC AND CONTRIBUTORS "AS IS"
+c  THIS SOFTWARE IS PROVIDED BY TRIAD NATIONAL SECURITY, LLC AND CONTRIBUTORS "AS IS"
 c  AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
 c  WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
 c  IN NO EVENT SHALL LOS ALAMOS NATIONAL SECURITY, LLC OR CONTRIBUTORS BE LIABLE FOR
